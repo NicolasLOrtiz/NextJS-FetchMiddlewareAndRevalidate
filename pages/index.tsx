@@ -7,6 +7,7 @@ type Repository = {
 
 const Home: NextPage = () => {
   const [repositories, setRepositories] = useState<string[]>([])
+  const [search, setSearch] = useState('')
 
   // Client-side rendering
   useEffect(() => {
@@ -15,11 +16,14 @@ const Home: NextPage = () => {
       .then(data => setRepositories(data.map((repo: Repository) => repo.name)))
   }, [])
 
+  const filteredRepositories = search.length ? repositories.filter(repo => repo.includes(search)) : repositories
+
   return (
     <div>
       <h1>Hello Next.js</h1>
+      <input type="text" value={search} onChange={e => setSearch(e.target.value)}/>
       <ul>
-        {repositories.map(repo => (
+        {filteredRepositories.map(repo => (
           <li key={repo}>{repo}</li>
         ))}
       </ul>
